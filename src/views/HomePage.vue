@@ -59,7 +59,8 @@ export default {
             }
             else {
                 this.loginError = true;
-                console.log('invalid email or phone');
+                this.supabaseLogin();
+                // console.log('invalid email or phone');
             }
         },
         checkPhoneOrEmail(value) {
