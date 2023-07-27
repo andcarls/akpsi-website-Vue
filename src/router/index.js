@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { supabase } from '../lib/supabase'
+import { auth_isLoggedIn } from '../lib/auth'
 import LoginPage from '../views/LoginPage.vue'
 import UserDashboard from '../views/UserDashboard.vue'
-
+import UserInformation from '../views/UserInformation.vue'
 // function loadPage(view) {
 //   return () =>
 //     import(
@@ -21,6 +21,11 @@ const routes = [
     name: 'LoginPage',
     component: LoginPage
   },
+  {
+    path: '/UserInformation',
+    name: 'UserInformation',
+    component: UserInformation
+  }
 ]
 
 const router = createRouter({
@@ -29,8 +34,17 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  const currentSession = supabase.auth.getSession();
-  if (to.name !== 'login-page' && !currentSession) {
+  const signedIn = await auth_isLoggedIn();
+  if (to.path === '/') {
+    if (!signedIn) {
+      return;
+    }
+    else {
+      return '/Dashboard';
+    }
+  }
+  else if (!signedIn) {
+    console.log('Please Log In');
     return { name: 'LoginPage' }
   }
 })

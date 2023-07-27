@@ -119,7 +119,7 @@ html {
     max-width: 550px;
     /* height: 200px; */
     text-align: center;
-    background-color: #0a66c2c2;
+    background-color: #0a66c2df;
     border-radius: 20px;
     padding: 10px;
 }
@@ -131,19 +131,21 @@ html {
 
 .login-form label {
     margin: 10px 0px;
+    text-align: left;
+    left: 0px;
+    font-size: larger;
 }
 
 .login-form input {
     margin: 10px 0px;
     padding: 10px 5px;
-    box-shadow: 0 0 5px black;
+    box-shadow: 0 0 3px black;
     width: 65%;
     max-width: 400px;
     height: 10%;
     align-items: center;
     justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
+    border-radius: 10px;
 }
 
 .login-form button {
@@ -176,7 +178,7 @@ html {
 
 .nested-enter-active,
 .nested-leave-active {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 .nested-leave-active {
