@@ -103,6 +103,7 @@ export default {
                 const { error } = await supabase
                     .from('user_information')
                     .update({
+                        last_updated: 'now()',
                         first_name: this.firstName,
                         last_name: this.lastName,
                         uniqname: this.uniqname,

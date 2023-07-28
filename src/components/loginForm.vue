@@ -56,3 +56,5 @@ export default {
     }
 }
 </script>
+
+<style src="../home.css" scoped></style>

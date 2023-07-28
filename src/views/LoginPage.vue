@@ -1,5 +1,7 @@
 <template>
-    <body>
+    <html class="login-page">
+
+    <body class="login-page">
         <!-- v-cloak to hide while loading -->
         <div id="app" v-cloak>
             <header>
@@ -30,8 +32,10 @@
             </div> -->
         </div>
     </body>
+
+    </html>
 </template>
-<style src="../home.css"></style>
+<style src="../home.css" scoped></style>
 
 <script>
 // @ is an alias to /src
@@ -51,7 +55,6 @@ export default {
         }
     },
     mounted() {
-        console.log('mounted');
         this.showLogin = true;
     },
     methods: {
@@ -65,7 +68,8 @@ export default {
             this.showLogin = !this.showLogin;
             this.buttonStatus = !this.buttonStatus;
         },
-        goToDashboard() {
+        async goToDashboard() {
+            console.log('to dashboard!');
             this.$router.push('/Dashboard');
         },
         async handleLogin(value) {
@@ -179,3 +183,13 @@ export default {
 }
 </script>
   
+<style scoped>
+body {
+    background-image: url(../assets/akpsi-members-photo.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    min-width: 100%;
+}
+</style>
