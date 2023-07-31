@@ -7,6 +7,7 @@
             <UserInformationEditor></UserInformationEditor>
         </div>
         <div v-if="financesMode">
+            <PieChart></PieChart>
             <table>
                 <tr>
                     <th>Event</th>
@@ -48,6 +49,7 @@ import { supabase } from '@/lib/supabase';
 import { auth_signOut } from '../lib/auth';
 import UserInformationEditor from '../components/UserInformationEditor.vue';
 import NavBar from '../components/NavBar.vue'
+import PieChart from '../components/PieChart.vue'
 export default {
     name: 'UserDashboard',
     data() {
@@ -116,7 +118,8 @@ export default {
     },
     components: {
         UserInformationEditor,
-        NavBar
+        NavBar,
+        PieChart
     }
 
 
