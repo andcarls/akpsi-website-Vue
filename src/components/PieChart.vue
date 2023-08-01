@@ -1,9 +1,15 @@
 <template>
-    <div class="pie-chart-container" style="height: 500px;  position: relative;">
+    <div>
         <Pie :data="data" :options="options" />
     </div>
 </template>
 
+<style scoped>
+div {
+    /* width: 50vh;
+    position: relative; */
+}
+</style>
 
 <script>
 import {

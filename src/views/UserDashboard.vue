@@ -7,7 +7,12 @@
             <UserInformationEditor></UserInformationEditor>
         </div>
         <div v-if="financesMode">
-            <PieChart></PieChart>
+            <div class="pie-chart-outer">
+                <div class="pie-chart-inner">
+                    <PieChart></PieChart>
+                </div>
+            </div>
+
             <table>
                 <tr>
                     <th>Event</th>
@@ -130,6 +135,19 @@ export default {
 body {
     padding: 0;
     margin: 0;
+}
+
+.pie-chart-outer {
+    width: 100vw;
+    text-align: center;
+}
+
+.pie-chart-inner {
+    width: 80vw;
+    /* justify-content: center; */
+    /* text-align: center; */
+    display: inline-block;
+    margin: 0 auto;
 }
 </style>
 
