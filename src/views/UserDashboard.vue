@@ -1,5 +1,6 @@
 <template>
-    <div id="app" v-cloak>
+    <PageLoader v-if="dataIsLoading"></PageLoader>
+    <div id="app" v-if="!dataIsLoading">
         <navBar></navBar>
         <p style="text-align: center;">Welcome, {{ userName }}</p>
         <div v-if="needsUpdate">
@@ -12,33 +13,7 @@
                     <PieChart></PieChart>
                 </div>
             </div>
-
-            <table>
-                <tr>
-                    <th>Event</th>
-                    <th>Event Date</th>
-                    <th>Amount Due</th>
-                    <th>Due Date</th>
-                    <th>Notes</th>
-                </tr>
-                <tr v-for="(item, key) in charges" :key="key">
-                    <th>
-                        {{ item.events.event_name }}
-                    </th>
-                    <th>
-                        {{ item.events.event_date }}
-                    </th>
-                    <th>
-                        ${{ item.amount }}
-                    </th>
-                    <th>
-                        {{ item.due_date }}
-                    </th>
-                    <th>
-                        {{ item.notes }}
-                    </th>
-                </tr>
-            </table>
+            <TableVue :data="charges"></TableVue>
         </div>
         <div v-if="bDirectoryMode">
 
@@ -55,6 +30,8 @@ import { auth_signOut } from '../lib/auth';
 import UserInformationEditor from '../components/UserInformationEditor.vue';
 import NavBar from '../components/NavBar.vue'
 import PieChart from '../components/PieChart.vue'
+import TableVue from '../components/TableVue.vue'
+import PageLoader from '../components/PageLoader.vue';
 export default {
     name: 'UserDashboard',
     data() {
@@ -65,9 +42,13 @@ export default {
             needsUpdate: false,
             lastUpdated: 0,
             financesMode: true,
-            charges: [],
+            charges: null,
+            tableHeaders: {
+                event_name: 'Event', event_date: 'Event Date', amount: 'Amount Due', due_date: 'Due Date', notes: 'Notes'
+            },
             bDirectoryMode: false,
-            aDirectoryMode: false
+            aDirectoryMode: false,
+            dataIsLoading: true,
         }
     },
     methods: {
@@ -102,18 +83,51 @@ export default {
             }
         },
         async fetchFinanceInfo() {
-            const { data } = await supabase
-                .from('user_charges')
-                .select(`
+            let currTime = Date.now();
+            let finalTime = currTime + 500;
+            let data;
+            try {
+                const { data: queryData, error } = await supabase
+                    .from('user_charges')
+                    .select(`
                     amount,
                     paid,
                     due_date,
                     notes,
                     events (event_name, event_date)
                 `);
-            this.charges = data;
-            console.log(this.charges);
-            console.log(this.charges[0]);
+                if (error) {
+                    throw error;
+                }
+                data = queryData;
+            }
+            catch (error) {
+                alert(error.message);
+            }
+            finally {
+                if (data.length != 0) {
+                    this.charges = data.map(item => ({
+
+                        'Event': item.events.event_name ? item.events.event_name : 'n/a',
+                        'Event Date': item.events.event_date ? item.events.event_date : '...',
+                        'Amount Due': item.amount ? item.amount : 'n/a',
+                        'Due Date': item.due_date ? item.due_date : '...',
+                        'Notes': item.notes ? item.notes : '...',
+                    }));
+                }
+                while (currTime < finalTime) {
+                    currTime = Date.now();
+                }
+                console.log(this.charges);
+                this.dataIsLoading = false;
+            }
+
+            // this.charges = data;
+
+            // this.charges = data.map(item => {
+            //     const { events, ...rest } = item; // Destructure events from the object
+            //     return { ...rest, ...events }; // Spread the remaining properties and events
+            // });
         }
     },
     async beforeMount() {
@@ -124,7 +138,9 @@ export default {
     components: {
         UserInformationEditor,
         NavBar,
-        PieChart
+        PieChart,
+        TableVue,
+        PageLoader
     }
 
 
@@ -132,6 +148,10 @@ export default {
 </script>
 
 <style>
+[v-cloak] {
+    display: none;
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -143,7 +163,7 @@ body {
 }
 
 .pie-chart-inner {
-    width: 80vw;
+    width: 70vw;
     /* justify-content: center; */
     /* text-align: center; */
     display: inline-block;
