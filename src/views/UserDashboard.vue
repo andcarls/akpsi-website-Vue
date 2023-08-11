@@ -10,10 +10,10 @@
         <div v-if="financesMode">
             <div class="pie-chart-outer">
                 <div class="pie-chart-inner">
-                    <PieChart></PieChart>
+                    <PieChart :pieData="pieChartData" v-if="!dataIsLoading"></PieChart>
                 </div>
             </div>
-            <TableVue :data="charges"></TableVue>
+            <TableVue :data="charges" :emptyMessage="`Congratulations! You're debt free.`"></TableVue>
         </div>
         <div v-if="bDirectoryMode">
 
@@ -49,6 +49,14 @@ export default {
             bDirectoryMode: false,
             aDirectoryMode: false,
             dataIsLoading: true,
+            pieChartData: {
+                labels: [],
+                datasets: [
+                    {
+                        data: [],
+                    }
+                ]
+            },
         }
     },
     methods: {
@@ -107,7 +115,6 @@ export default {
             finally {
                 if (data.length != 0) {
                     this.charges = data.map(item => ({
-
                         'Event': item.events.event_name ? item.events.event_name : 'n/a',
                         'Event Date': item.events.event_date ? item.events.event_date : '...',
                         'Amount Due': item.amount ? item.amount : 'n/a',
@@ -118,8 +125,6 @@ export default {
                 while (currTime < finalTime) {
                     currTime = Date.now();
                 }
-                console.log(this.charges);
-                this.dataIsLoading = false;
             }
 
             // this.charges = data;
@@ -128,12 +133,23 @@ export default {
             //     const { events, ...rest } = item; // Destructure events from the object
             //     return { ...rest, ...events }; // Spread the remaining properties and events
             // });
-        }
+        },
+        async fillPieChart() {
+            this.charges.forEach((element) => {
+                console.log('element:', element);
+                this.pieChartData.labels.push(element.Event);
+                this.pieChartData.datasets[0].data.push(element['Amount Due']);
+            })
+            console.log(this.pieChartData);
+        },
     },
+
     async beforeMount() {
         this.needsUpdate = await this.fetchSessionUserInfo();
         this.financesMode = !this.needsUpdate;
-        this.fetchFinanceInfo();
+        await this.fetchFinanceInfo();
+        await this.fillPieChart();
+        this.dataIsLoading = false;
     },
     components: {
         UserInformationEditor,

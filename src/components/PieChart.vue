@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Pie :data="data" :options="options" />
+        <Pie :data="chartData" :options="options" v-if="chartData" />
     </div>
 </template>
 
@@ -28,8 +28,19 @@ export default {
     components: {
         Pie
     },
+    props: ['pieData'],
+    beforeMount() {
+        console.log('before mounting pie chart');
+    },
+    computed: {
+        chartData: {
+            get() {
+                return this.pieData;
+            }
+        }
+    },
     data() {
-        return chartConfig
+        return chartConfig;
     }
 }
 

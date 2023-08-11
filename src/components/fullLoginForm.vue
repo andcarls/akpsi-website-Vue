@@ -8,9 +8,9 @@
                 :type="inpObj.type" v-model="inpObj.value" />
             <p style="color: white; font-size: larger; background-color: #ae00009b; width:fit-content; margin-left: auto; margin-right: auto; padding: 1px 3px;"
                 v-show="error">
-                <strong>{{
-                    errorMessage
-                }}</strong>
+                <strong>
+                    Error: {{ errorMessage }}
+                </strong>
             </p>
             <button>Sign In</button>
         </form>

@@ -1,13 +1,13 @@
 <template>
-    <h1 v-if="!tableData">Congratulations! You're debt free.</h1>
+    <h1 style="text-align: center;" v-if="!tableData">{{ emptyMsg }}</h1>
     <table v-if="tableData">
         <tr>
             <th v-for="(head, key) in Object.keys(tableData[0])" :key="key">
                 {{ head }}
             </th>
         </tr>
-        <tr v-for="(charge, key) in tableData" :key="key">
-            <td v-for="(val, key) in charge" :key="key">
+        <tr v-for="(item, key) in tableData" :key="key">
+            <td v-for="(val, key) in item" :key="key">
                 {{ val }}
             </td>
         </tr>
@@ -17,7 +17,7 @@
 <script>
 export default {
     name: 'TableVue',
-    props: ['data'],
+    props: ['data', 'emptyMessage'],
     data() {
         return {
             debt: true,
@@ -29,6 +29,11 @@ export default {
                 return this.data;
             }
         },
+        emptyMsg: {
+            get() {
+                return this.emptyMessage;
+            }
+        }
     },
 }
 </script>
