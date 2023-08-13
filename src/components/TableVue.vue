@@ -1,12 +1,14 @@
 <template>
     <h1 style="text-align: center;" v-if="!tableData">{{ emptyMsg }}</h1>
+    <customInput v-model="search" :label="'Search'"></customInput>
+    {{ search }}
     <table v-if="tableData">
         <tr>
             <th v-for="(head, key) in Object.keys(tableData[0])" :key="key">
                 {{ head }}
             </th>
         </tr>
-        <tr v-for="(item, key) in tableData" :key="key">
+        <tr v-for="(item, key) in filteredData" :key="key">
             <td v-for="(val, key) in item" :key="key">
                 {{ val }}
             </td>
@@ -15,12 +17,14 @@
 </template>
 
 <script>
+import customInput from './customInput.vue'
 export default {
     name: 'TableVue',
     props: ['data', 'emptyMessage'],
     data() {
         return {
             debt: true,
+            search: ''
         }
     },
     computed: {
@@ -35,6 +39,9 @@ export default {
             }
         }
     },
+    components: {
+        customInput
+    }
 }
 </script>
 
@@ -42,8 +49,8 @@ export default {
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
-    margin: 5px;
+    width: 95%;
+    margin: 5px auto;
 }
 
 td,

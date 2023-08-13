@@ -70,7 +70,7 @@ export default {
         },
         async goToDashboard() {
             console.log('to dashboard!');
-            this.$router.push('/Dashboard');
+            this.$router.push('/Finances');
         },
         async handleLogin(value) {
             let type = this.checkPhoneOrEmail(value);

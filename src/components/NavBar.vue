@@ -6,13 +6,13 @@
         <ul>
             <!-- Desktop view -->
             <li class="desktop">
-                Finances
+                <router-link to="/Finances">Finances</router-link>
             </li>
             <li class="desktop">
-                Brotherhood Directory
+                <router-link to="/BrotherhoodDirectory">Brotherhood Directory</router-link>
             </li>
             <li class="desktop">
-                Alumni Directory
+                <router-link to="/AlumniDirectory">Alumni Directory</router-link>
             </li>
             <!-- Mobile View -->
             <!-- <ul class="mobile">
@@ -36,10 +36,15 @@
 import { auth_signOut } from '../lib/auth';
 export default {
     name: 'NavBar',
+    props: ['financeMode', 'brotherhoodMode', 'alumniMode'],
     methods: {
         async signOut() {
             await auth_signOut();
             this.$router.push('/');
+        },
+        toggleFinance() {
+            console.log('update this bitch');
+            this.$emit('financeMode');
         }
     }
 }
@@ -69,6 +74,18 @@ nav ul li {
     font-family: 'Times New Roman', Times, serif;
     font-size: larger;
     color: white;
+
+}
+
+nav ul li a {
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .logo img {

@@ -38,8 +38,10 @@ export default {
 
 .loader {
     position: absolute;
-    width: 20vw;
-    height: 20vw;
+    /* width: 20vw; */
+    /* height: 20vw; */
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-top-color: #0A66C2;
@@ -50,10 +52,14 @@ export default {
 .img {
     content: "";
     position: absolute;
-    top: 3vw;
-    left: 3vw;
-    width: 14vw;
-    height: 14vw;
+    /* top: 3vw; */
+    /* left: 3vw; */
+    top: 18px;
+    left: 18px;
+    /* width: 14vw; */
+    /* height: 14vw; */
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
     background: url('../assets/AKPsi-Mobile_compressed.png') no-repeat center center;
     background-size: 100%;

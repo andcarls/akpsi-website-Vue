@@ -1,5 +1,8 @@
 <template>
     <PageLoader v-if="dataIsLoading"></PageLoader>
+    <!-- {{ financesMode }}
+    {{ bDirectoryMode }}
+    {{ aDirectoryMode }} -->
     <div id="app" v-if="!dataIsLoading">
         <navBar></navBar>
         <p style="text-align: center;">Welcome, {{ userName }}</p>
@@ -14,26 +17,25 @@
                 </div>
             </div>
             <TableVue :data="charges" :emptyMessage="`Congratulations! You're debt free.`"></TableVue>
-        </div>
-        <div v-if="bDirectoryMode">
-
-        </div>
-        <div v-if="aDirectoryMode">
-
+            <p class="show-paid" @click="this.showPaidCharges = !this.showPaidCharges"
+                v-if="paidCharges && !this.showPaidCharges">Show Paid Charges</p>
+            <p class="show-paid" @click="this.showPaidCharges = !this.showPaidCharges"
+                v-if="paidCharges && this.showPaidCharges">Hide Paid Charges</p>
+            <TableVue :data="paidCharges" v-if="showPaidCharges"></TableVue>
         </div>
     </div>
 </template>
 
 <script>
 import { supabase } from '@/lib/supabase';
-import { auth_signOut } from '../lib/auth';
+// import { auth_signOut } from '../lib/auth';
 import UserInformationEditor from '../components/UserInformationEditor.vue';
 import NavBar from '../components/NavBar.vue'
 import PieChart from '../components/PieChart.vue'
 import TableVue from '../components/TableVue.vue'
 import PageLoader from '../components/PageLoader.vue';
 export default {
-    name: 'UserDashboard',
+    name: 'UserFinances',
     data() {
         return {
             session: '',
@@ -43,11 +45,15 @@ export default {
             lastUpdated: 0,
             financesMode: true,
             charges: null,
+            paidCharges: null,
+            showPaidCharges: false,
             tableHeaders: {
                 event_name: 'Event', event_date: 'Event Date', amount: 'Amount Due', due_date: 'Due Date', notes: 'Notes'
             },
             bDirectoryMode: false,
+            bDataLoaded: false,
             aDirectoryMode: false,
+            aDataLoaded: false,
             dataIsLoading: true,
             pieChartData: {
                 labels: [],
@@ -60,12 +66,19 @@ export default {
         }
     },
     methods: {
-        async signOut() {
-            const signedOut = await auth_signOut();
-            if (signedOut) {
-                this.$router.push('/');
-            }
+        async toggleBrother() {
+            this.$router.push('/BrotherhoodDirectory');
         },
+        async toggleAlumni() {
+            this.$router.push('/AlumniDirectory');
+        },
+
+        // async signOut() {
+        //     // const signedOut = await auth_signOut();
+        //     // if (signedOut) {
+        //     //     this.$router.push('/');
+        //     // }
+        // },
         async fetchSessionUserInfo() {
             const { data } = await supabase.auth.getSession();
             this.session = data.session;
@@ -103,7 +116,7 @@ export default {
                     due_date,
                     notes,
                     events (event_name, event_date)
-                `);
+                    `);
                 if (error) {
                     throw error;
                 }
@@ -114,13 +127,32 @@ export default {
             }
             finally {
                 if (data.length != 0) {
-                    this.charges = data.map(item => ({
-                        'Event': item.events.event_name ? item.events.event_name : 'n/a',
-                        'Event Date': item.events.event_date ? item.events.event_date : '...',
-                        'Amount Due': item.amount ? item.amount : 'n/a',
-                        'Due Date': item.due_date ? item.due_date : '...',
-                        'Notes': item.notes ? item.notes : '...',
-                    }));
+                    // unpaid charges
+                    this.charges = data
+                        .filter(item => item.paid === false)
+                        .map(item => ({
+                            'Event': item.events.event_name ? item.events.event_name : 'n/a',
+                            'Event Date': item.events.event_date ? item.events.event_date : '...',
+                            'Amount Due': item.amount ? item.amount : 'n/a',
+                            'Due Date': item.due_date ? item.due_date : '...',
+                            'Notes': item.notes ? item.notes : '...',
+                        }));
+                    // paid charges
+                    this.paidCharges = data
+                        .filter(item => item.paid === true)
+                        .map(item => ({
+                            'Event': item.events.event_name ? item.events.event_name : 'n/a',
+                            'Event Date': item.events.event_date ? item.events.event_date : '...',
+                            'Amount Due': item.amount ? item.amount : 'n/a',
+                            'Due Date': item.due_date ? item.due_date : '...',
+                            'Notes': item.notes ? item.notes : '...',
+                        }));
+                    if (this.charges.length === 0) {
+                        this.charges = null;
+                    }
+                    if (this.paidCharges.length === 0) {
+                        this.paidCharges = null;
+                    }
                 }
                 while (currTime < finalTime) {
                     currTime = Date.now();
@@ -136,7 +168,6 @@ export default {
         },
         async fillPieChart() {
             this.charges.forEach((element) => {
-                console.log('element:', element);
                 this.pieChartData.labels.push(element.Event);
                 this.pieChartData.datasets[0].data.push(element['Amount Due']);
             })
@@ -180,6 +211,7 @@ body {
 
 .pie-chart-inner {
     width: 70vw;
+    max-width: 500px;
     /* justify-content: center; */
     /* text-align: center; */
     display: inline-block;
@@ -188,6 +220,18 @@ body {
 </style>
 
 <style scoped>
+.show-paid {
+    margin-left: 2.5%;
+    color: rgb(145, 145, 145);
+    font-size: small;
+}
+
+.show-paid:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: rgb(91, 91, 91);
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;

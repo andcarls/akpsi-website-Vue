@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth_isLoggedIn } from '../lib/auth'
 import LoginPage from '../views/LoginPage.vue'
-import UserDashboard from '../views/UserDashboard.vue'
+import UserFinances from '../views/UserFinances.vue'
 import UserInformation from '../views/UserInformation.vue'
+import BrotherhoodDirectory from '../views/BrotherhoodDirectory.vue'
 // function loadPage(view) {
 //   return () =>
 //     import(
@@ -12,9 +13,9 @@ import UserInformation from '../views/UserInformation.vue'
 
 const routes = [
   {
-    path: '/Dashboard',
-    name: 'UserDashboard',
-    component: UserDashboard,
+    path: '/Finances',
+    name: 'UserFinances',
+    component: UserFinances,
   },
   {
     path: '/',
@@ -25,6 +26,11 @@ const routes = [
     path: '/UserInformation',
     name: 'UserInformation',
     component: UserInformation
+  },
+  {
+    path: '/BrotherhoodDirectory',
+    name: 'BrotherhoodDirectory',
+    component: BrotherhoodDirectory
   }
 ]
 
