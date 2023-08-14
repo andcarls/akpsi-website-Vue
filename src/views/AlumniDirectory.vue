@@ -2,8 +2,9 @@
     <PageLoader v-if="dataIsLoading"></PageLoader>
     <div v-if="!dataIsLoading" id="app" v-cloak>
         <NavBar></NavBar>
-        <h1 style="text-align: center;">Brotherhood Directory</h1>
-        <TableVue :data="brotherInfo" :emptyMessage="'Hmmm... We don\'t have any data'"></TableVue>
+        {{ testingData }}
+        <h1 style="text-align: center;">Alumni Directory</h1>
+        <TableVue :data="alumniInfo" :emptyMessage="'Hmmm... We don\'t have any data'"></TableVue>
     </div>
 </template>
 
@@ -13,17 +14,10 @@ import NavBar from '../components/NavBar.vue';
 // import { supabase } from '@/lib/supabase';
 import TableVue from '@/components/TableVue.vue';
 export default {
-    name: 'BrotherhoodDirectory',
+    name: 'AlumniDirectory',
     methods: {
-        async loadBDatabase() {
-            await this.$store.dispatch('fetchBData');
-        }
-    },
-    computed: {
-        brotherInfo: {
-            get() {
-                return this.$store.getters.getBData;
-            }
+        async loadADatabase() {
+            await this.$store.dispatch('fetchAData');
         }
     },
     data() {
@@ -32,8 +26,15 @@ export default {
         }
     },
     async beforeMount() {
-        await this.loadBDatabase();
+        await this.loadADatabase();
         this.dataIsLoading = false;
+    },
+    computed: {
+        alumniInfo: {
+            get() {
+                return this.$store.getters.getAData;
+            }
+        }
     },
     components: {
         NavBar,

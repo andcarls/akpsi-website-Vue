@@ -1,9 +1,9 @@
 <template>
     <nav>
-        <div class="logo">
-            <img class="logo" src="../assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
-        </div>
         <ul>
+            <div class="logo">
+                <img class="logo" src="../assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
+            </div>
             <!-- Desktop view -->
             <li class="desktop">
                 <router-link to="/Finances">Finances</router-link>
@@ -26,10 +26,10 @@
                     Alumni Directory
                 </li>
             </ul> -->
+            <div class="sign-out">
+                <button class="sign-out" @click="signOut">Sign Out</button>
+            </div>
         </ul>
-        <div class="sign-out">
-            <button class="sign-out" @click="signOut">Sign Out</button>
-        </div>
     </nav>
 </template>
 <script>
@@ -50,13 +50,13 @@ export default {
 }
 </script>
 
+
+
 <style scoped>
 nav {
     background-color: #0A66C2;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
     text-align: center;
 }
 
@@ -66,6 +66,9 @@ nav ul {
     margin: 0;
     flex-wrap: wrap;
     display: flex;
+    justify-content: space-between;
+    /* flex-wrap: wrap; */
+    margin: 0px 3px;
 }
 
 nav ul li {
@@ -74,13 +77,13 @@ nav ul li {
     font-family: 'Times New Roman', Times, serif;
     font-size: larger;
     color: white;
-
 }
 
 nav ul li a {
     font-family: 'Times New Roman', Times, serif;
     color: white;
     text-decoration: none;
+    padding: 10px;
 }
 
 nav ul li:hover {
@@ -106,22 +109,21 @@ nav ul li:hover {
     font-family: Georgia, 'Times New Roman', Times, serif;
     /* font-weight: bolder; */
     font-size: large;
-    /* line-height: 20px; */
+    line-height: 20px;
     height: 40px;
-    width: 52.95px;
-    /* overflow: hidden; */
+    /* width: 52.95px; */
+    width: fit-content;
+    overflow: hidden;
     padding: 0px 20px;
 }
 
 
-.sign-out:hover {
-    background-color: #16437E;
-    color: #ffffff;
+.sign-out button:hover {
+    background-color: rgb(190, 190, 190);
 }
 
-.sign-out:active {
-    background: #09223b;
-    color: rgb(255, 255, 255, .7);
+.sign-out button:active {
+    background: rgb(108, 108, 108);
 }
 
 .views {

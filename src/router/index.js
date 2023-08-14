@@ -4,6 +4,7 @@ import LoginPage from '../views/LoginPage.vue'
 import UserFinances from '../views/UserFinances.vue'
 import UserInformation from '../views/UserInformation.vue'
 import BrotherhoodDirectory from '../views/BrotherhoodDirectory.vue'
+import AlumniDirectory from '../views/AlumniDirectory.vue'
 // function loadPage(view) {
 //   return () =>
 //     import(
@@ -31,6 +32,11 @@ const routes = [
     path: '/BrotherhoodDirectory',
     name: 'BrotherhoodDirectory',
     component: BrotherhoodDirectory
+  },
+  {
+    path: '/AlumniDirectory',
+    name: 'AlumniDirectory',
+    component: AlumniDirectory
   }
 ]
 
@@ -46,7 +52,7 @@ router.beforeEach(async (to) => {
       return;
     }
     else {
-      return '/Dashboard';
+      return '/Finances';
     }
   }
   else if (!signedIn) {

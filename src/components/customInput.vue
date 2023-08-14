@@ -1,14 +1,15 @@
 <template>
     <label>
         {{ label }} <br>
-        <input :type="inputType" v-model="inputValue" :placeholder="label" /> <br>
+        <!-- {{ label }} <br> -->
+        <input :type="inputType" v-model="inputValue" :placeholder="placeHolder" /> <br>
     </label>
 </template>
 
 <script>
 export default {
     name: 'customInput',
-    props: ['label', 'type', 'modelValue'],
+    props: ['label', 'placeHolder', 'type', 'modelValue'],
     computed: {
         inputValue: {
             get() {

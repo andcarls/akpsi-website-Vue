@@ -5,7 +5,7 @@
         <form @submit.prevent="handleSubmit" v-show="showLogin" class="login-form">
             <h1 class="inner">Sign In</h1>
             <customInput v-for="(inpObj, i) in customInputs" :key="i" class="inner" :label="inpObj.label"
-                :type="inpObj.type" v-model="inpObj.value" />
+                :placeHolder="inpObj.placeHolder" :type="inpObj.type" v-model="inpObj.value" />
             <p style="color: white; font-size: larger; background-color: #ae00009b; width:fit-content; margin-left: auto; margin-right: auto; padding: 1px 3px;"
                 v-show="error">
                 <strong>
@@ -44,11 +44,13 @@ export default {
             customInputs: [
                 {
                     label: 'Email',
+                    placeHolder: 'Email',
                     type: 'email',
                     value: '',
                 },
                 {
                     label: 'Password',
+                    placeHolder: 'Password',
                     type: 'password',
                     value: ''
                 },

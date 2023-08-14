@@ -70,7 +70,7 @@ export default {
         },
         async goToDashboard() {
             console.log('to dashboard!');
-            this.$router.push('/Finances');
+            this.$router.go('/Finances');
         },
         async handleLogin(value) {
             let type = this.checkPhoneOrEmail(value);
@@ -116,7 +116,6 @@ export default {
                 }
                 else {
                     console.log('Successful OTP login', data);
-                    //this.goToDashboard();
                 }
             } catch (error) {
                 alert(error.error_description || error.message);
@@ -136,7 +135,6 @@ export default {
             }
             else {
                 console.log('Successful magic link login', data);
-                //this.goToDashboard();
             }
 
         },
