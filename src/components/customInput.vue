@@ -1,16 +1,24 @@
 <template>
-    <label>
-        {{ label }} <br>
+    <div>
+        <label>
+            {{ label }} <br>
+        </label>
+
         <!-- {{ label }} <br> -->
-        <input :type="inputType" v-model="inputValue" :placeholder="placeHolder" /> <br>
-    </label>
+        <input :type="inputType" v-model="inputValue" :placeholder="placeHolder" :disabled="isDisabled" /> <br>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'customInput',
-    props: ['label', 'placeHolder', 'type', 'modelValue'],
+    props: ['label', 'placeHolder', 'type', 'modelValue', 'disabled'],
     computed: {
+        isDisabled: {
+            get() {
+                return this.disabled;
+            }
+        },
         inputValue: {
             get() {
                 return this.modelValue;

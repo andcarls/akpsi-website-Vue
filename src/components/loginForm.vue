@@ -1,13 +1,22 @@
 
 <!-- template -->
 <template>
-    <transition name="nested">
-        <form @submit.prevent="handleSubmit" v-show="showLogin" class="login-form">
-            <h1 class="inner">Sign In</h1>
-            <customInput v-for="(inpObj, i) in customInputs" :key="i" class="inner" :label="inpObj.label"
-                :type="inpObj.type" v-model="inpObj.value" />
-            text
-            <button>Sign In</button>
+    <transition name="nested" v-show="showLogin">
+        <form @submit.prevent="handleSubmit" class="login-form">
+            <h2 class="inner">Welcome</h2>
+            <customInput class="inner" :label="customInputs[0].label" :placeHolder="customInputs[0].placeHolder"
+                :type="customInputs[0].type" v-model="customInputs[0].value" :disabled="isDisabled" />
+            <p style="color: white; font-size: larger; background-color: #ae00009b; width:fit-content; margin-left: auto; margin-right: auto; padding: 1px 3px;"
+                v-show="error">
+                <strong>
+                    Error: {{ errorMessage }}
+                </strong>
+            </p>
+            <button v-show="!showCode || error">Get Login Code</button>
+            <customInput class="inner" v-if="!error && showCode" :label="customInputs[1].label"
+                :placeHolder="customInputs[1].placeHolder" :type="customInputs[1].type" v-model="customInputs[1].value">
+            </customInput>
+            <button v-show="showCode && !error">Log In</button>
         </form>
     </transition>
 </template>
@@ -16,21 +25,31 @@
 import customInput from './customInput'
 export default {
     name: 'loginForm',
-    props: ['show', 'errorStatus', 'errorMessage'],
+    props: ['show', 'errorStatus', 'errorMessage', 'verifyOTP', 'disabled'],
     computed: {
+        isDisabled: {
+            get() {
+                return this.disabled;
+            }
+        },
         showLogin: {
             get() {
                 return this.show;
             }
         },
-        errorStatus: {
+        error: {
             get() {
                 return this.errorStatus;
             }
         },
-        errorMessage: {
+        errorMsg: {
             get() {
                 return this.errorMessage;
+            }
+        },
+        showCode: {
+            get() {
+                return this.verifyOTP;
             }
         }
     }
@@ -38,11 +57,18 @@ export default {
         return {
             customInputs: [
                 {
-                    label: 'Phone # or Email',
-                    type: 'text',
+                    label: 'Email',
+                    placeHolder: 'Email',
+                    type: 'email',
                     value: '',
                 },
-            ]
+                {
+                    label: 'Login Code',
+                    placeHolder: 'Enter your OTP',
+                    type: 'text',
+                    value: ''
+                },
+            ],
         }
     }
     ,
@@ -51,7 +77,13 @@ export default {
     },
     methods: {
         handleSubmit() {
-            this.$emit('submit-login', this.customInputs[0].value);
+            if (this.error || !this.showCode) {
+                this.$emit('send-OTP', this.customInputs[0].value);
+            }
+            if (!this.error && this.showCode) {
+                this.$emit('verify-OTP', [this.customInputs[0].value, this.customInputs[1].value]);
+            }
+            // console.log(this.customInputs[0].label + ": " + this.customInputs[0].value);
         }
     }
 }
