@@ -5,12 +5,8 @@ import UserFinances from '../views/UserFinances.vue'
 import UserInformation from '../views/UserInformation.vue'
 import BrotherhoodDirectory from '../views/BrotherhoodDirectory.vue'
 import AlumniDirectory from '../views/AlumniDirectory.vue'
-// function loadPage(view) {
-//   return () =>
-//     import(
-//       /* webpackChunkName: "view-[request]" */ '@views/${view}'
-//     );
-// }
+import AdminLoginPage from '../views/admin/AdminLoginPage.vue'
+import AdminDashboard from '../views/admin/AdminDashboard.vue'
 
 const routes = [
   {
@@ -37,6 +33,16 @@ const routes = [
     path: '/AlumniDirectory',
     name: 'AlumniDirectory',
     component: AlumniDirectory
+  },
+  {
+    path: '/Admin',
+    name: 'AdminLoginPage',
+    component: AdminLoginPage
+  },
+  {
+    path: '/AdminDashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboard
   }
 ]
 
@@ -59,6 +65,7 @@ router.beforeEach(async (to) => {
     console.log('Please Log In');
     return { name: 'LoginPage' }
   }
+
 })
 
 export default router

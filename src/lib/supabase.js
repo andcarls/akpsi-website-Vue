@@ -1,3 +1,6 @@
+// Note: The below URL and AnonKey are intended to be public
+//       They do not allow any unwanted access due to Supabase's internal RLS and Auth polices
+//       Do not modify unless they change
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://ahuptqdhadtbesxvhuzz.supabase.co'

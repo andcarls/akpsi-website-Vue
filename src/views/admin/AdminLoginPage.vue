@@ -8,10 +8,10 @@
                 <nav>
                     <ul>
                         <li>
-                            <img src="../assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
+                            <img src="@/assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
                         </li>
                         <li>
-                            AKPsi-Phi Brotherhood Access
+                            AKPsi-Phi Admin Access
                         </li>
                         <li>
                             <button @click="toggleLogin" class="login-button"
@@ -35,15 +35,15 @@
 
     </html>
 </template>
-<style src="../home.css" scoped></style>
+<style src="@/home.css" scoped></style>
 
 <script>
 // @ is an alias to /src
 
 // import loginForm from '../components/loginForm'
-import fullLoginForm from '../components/fullLoginForm'
-import { supabase } from '../lib/supabase'
-import { auth_isLoggedIn, auth_signOut } from '../lib/auth'
+import fullLoginForm from '@/components/fullLoginForm'
+import { supabase } from '@/lib/supabase'
+import { auth_isLoggedIn, auth_signOut } from '@/lib/auth'
 export default {
     name: 'AdminLoginPage',
     data() {
@@ -68,9 +68,8 @@ export default {
             this.showLogin = !this.showLogin;
             this.buttonStatus = !this.buttonStatus;
         },
-        async goToDashboard() {
-            console.log('to dashboard!');
-            this.$router.go('/Finances');
+        async goToAdminDashboard() {
+            this.$router.go('/AdminDashboard');
         },
         async handleLogin(value) {
             let type = this.checkPhoneOrEmail(value);
@@ -156,7 +155,7 @@ export default {
                     this.loginError = true;
                     this.errorMessage = error.message;
                 } else {
-                    this.goToDashboard();
+                    this.goToAdminDashboard();
                 }
             } catch (error) {
                 console.log('Error signing in:', error.message);
@@ -183,7 +182,7 @@ export default {
   
 <style scoped>
 body {
-    background-image: url(../assets/akpsi-members-photo.jpeg);
+    background-image: url(@/assets/akpsi-members-photo.jpeg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
