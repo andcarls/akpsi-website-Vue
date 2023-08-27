@@ -1,15 +1,18 @@
 <template>
-    <p>Check especially email correctness, as it is relevant to authentication.</p>
-    <p>Tab to add additional rows.</p>
-    {{ newUsers }}
-    <div v-for="(user, key) in newUsers" :key="key">
-        <input v-model="user.first_name" placeholder="First Name">
-        <input v-model="user.last_name" placeholder="Last Name">
-        <input v-model="user.email" placeholder="Email">
-        <input v-model="user.grad_year" placeholder="Graduation Year" @keydown.tab="addRow(key)">
+    <h1 @click="show = !show" style="text-decoration: underline;">Adding Users</h1>
+    <div v-if="show">
+        <p>Check especially email correctness, as it is relevant to authentication.</p>
+        <p>Tab to add additional rows.</p>
+        {{ newUsers }}
+        <div v-for="(user, key) in newUsers" :key="key">
+            <input v-model="user.first_name" placeholder="First Name">
+            <input v-model="user.last_name" placeholder="Last Name">
+            <input v-model="user.email" placeholder="Email">
+            <input v-model="user.grad_year" placeholder="Graduation Year" @keydown.tab="addRow(key)">
+        </div>
+        <br />
+        <button @click="addUsers">Save</button>
     </div>
-    <br />
-    <button @click="addUsers">Save</button>
 </template>
 
 <script>
@@ -18,12 +21,9 @@ export default {
         return {
             newUsers: [
                 {
-                    first_name: null,
-                    last_name: null,
-                    email: null,
-                    grad_year: null
                 }
             ],
+            show: false
 
         }
     },

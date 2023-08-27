@@ -175,7 +175,7 @@ export default createStore({
           .select(`
                     first_name,
                     last_name,
-                    school_email,
+                    email,
                     phone,
                     graduation_year
                     `)
