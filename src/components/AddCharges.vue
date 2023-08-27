@@ -39,7 +39,7 @@ export default {
     },
     data() {
         return {
-            addCharges: true,
+            addCharges: false,
             success: false,
             selectedUsers: null,
             selectedEvent: null,

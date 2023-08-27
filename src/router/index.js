@@ -61,6 +61,14 @@ router.beforeEach(async (to) => {
       return '/Finances';
     }
   }
+  else if (to.path === '/Admin') {
+    if (!signedIn) {
+      return;
+    }
+    else {
+      return '/AdminDashboard';
+    }
+  }
   else if (!signedIn) {
     console.log('Please Log In');
     return { name: 'LoginPage' }

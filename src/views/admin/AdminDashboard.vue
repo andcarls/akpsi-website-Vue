@@ -4,7 +4,7 @@
         <h1 style="color: white;margin: 0; padding: 0;">You don't belong here.</h1>
         <img src="../../assets/Unauthorized_access.jpg" style="width: 100%" />
     </div>
-    <div v-else>
+    <div v-else style="width: 100%">
         <p>
             Notes: I don't provide delete functionality on some tables.
             Deleting data on tables that have linked data can have unexpected results and create errors.
@@ -26,7 +26,22 @@
             Also, I intend to include mass mailing for reminders.
         </p>
         <UserRegistration></UserRegistration>
+        <AddEvent></AddEvent>
         <AddCharges></AddCharges>
+        <h1 @click="showTables = !showTables" style="text-decoration: underline;">Edit Tables</h1>
+        <div v-show="showTables" style="width: 100%;">
+            <h2 @click="showEvents = !showEvents" style="text-decoration: underline;">Events</h2>
+            <EditableTableVue :data="eventsData" @update-cell="updateEvent" @refresh-table="refreshEvent" v-if="showEvents">
+            </EditableTableVue>
+            <h2 @click="showUserInfo = !showUserInfo" style="text-decoration: underline;">User Info</h2>
+            <p v-if="showUserInfo">All user info is shown -- brothers and alumni. You may see cols on brothers not yet
+                filled out relevant to alumni. This is simply hidden data until graduation.</p>
+            <EditableTableVue :data="userData" @update-cell="updateUserInfo" @refresh-table="refreshUserInfo"
+                v-if="showUserInfo"></EditableTableVue>
+            <h2 @click="showUserCharges = !showUserCharges" style="text-decoration: underline;">User Charges</h2>
+            <EditableTableVue :data="chargesData"></EditableTableVue>
+        </div>
+
 
     </div>
 </template>
@@ -35,6 +50,8 @@
 import { supabase } from '@/lib/supabase';
 import UserRegistration from '@/components/UserRegistration.vue';
 import AddCharges from '@/components/AddCharges.vue';
+import AddEvent from '@/components/AddEvent.vue';
+import EditableTableVue from '@/components/EditableTableVue.vue';
 // import PageLoader from '@/components/PageLoader.vue';
 export default {
     name: 'AdminDashboard',
@@ -45,6 +62,10 @@ export default {
             eventsData: null,
             chargesData: null,
             userData: null,
+            showTables: false,
+            showEvents: false,
+            showUserInfo: false,
+            showUserCharges: false,
         }
     },
     async beforeMount() {
@@ -58,7 +79,6 @@ export default {
         this.eventsData = await this.fetchEvents();
         this.chargesData = await this.fetchChargesData();
         this.userData = await this.fetchUserInformation();
-        console.log(this.$data);
         this.isLoading = false;
     },
     methods: {
@@ -70,7 +90,7 @@ export default {
             return false;
         },
         async fetchEvents() {
-            const { data, error } = await supabase.from('events').select('*');
+            const { data, error } = await supabase.from('events').select('*').order('event_id');
             if (error) {
                 alert(error.message);
             }
@@ -79,7 +99,32 @@ export default {
             }
         },
         async fetchChargesData() {
-            const { data, error } = await supabase.from('user_charges').select('*');
+            const { data, error } = await supabase.from('user_charges').select(`
+            notes,
+            events (
+                event_name
+                )
+                `);
+            if (error) {
+                alert(error.message);
+            }
+            else {
+                return data.map(row => {
+                    const newRow = {
+                        event_name: null,
+                        ...row,
+                    };
+                    if (newRow.events && newRow.events.event_name) {
+                        newRow.event_name = newRow.events.event_name;
+                        delete newRow.events;
+                    }
+                    console.log(newRow);
+                    return newRow;
+                });
+            }
+        },
+        async fetchUserInformation() {
+            const { data, error } = await supabase.from('user_information').select('*').order('last_name');
             if (error) {
                 alert(error.message);
             }
@@ -87,19 +132,36 @@ export default {
                 return data;
             }
         },
-        async fetchUserInformation() {
-            const { data, error } = await supabase.from('user_information').select('*');
+        async updateEvent(data, item) {
+            const { error } = await supabase.from('events')
+                .update(data)
+                .eq('event_id', item.event_id);
             if (error) {
-                alert(error.message);
+                alert('Error' + error.message);
+                alert('Please refresh table to ensure properly updated data.');
             }
-            else {
-                return data;
+        },
+        async refreshEvent() {
+            this.eventsData = await this.fetchEvents();
+        },
+        async updateUserInfo(data, item) {
+            const { error } = await supabase.from('user_information')
+                .update(data)
+                .eq('user_id', item.user_id);
+            if (error) {
+                alert('Error' + error.message);
+                alert('Please refresh table to ensure properly updated data.');
             }
+        },
+        async refreshUserInfo() {
+            this.userData = await this.fetchUserInformation();
         }
     },
     components: {
         UserRegistration,
-        AddCharges
+        AddCharges,
+        AddEvent,
+        EditableTableVue
     }
 }
 </script>
