@@ -52,7 +52,7 @@
             </EditableTableVue>
             <button v-if="showUserCharges" @click="toggleShowPaid">Toggle Paid</button>
         </div>
-        <h1 @click="showMarkChargesPaid = !showMarkChargesPaid" style="text-decoration: underline;">Mark Charges Paid</h1>
+        <MarkChargesPaid></MarkChargesPaid>
 
         <h1 @click="showSendEmailReminders = !showSendEmailReminders" style="text-decoration: underline;">Send Email
             Reminders</h1>
@@ -69,6 +69,7 @@ import UserRegistration from '@/components/UserRegistration.vue';
 import AddCharges from '@/components/AddCharges.vue';
 import AddEvent from '@/components/AddEvent.vue';
 import EditableTableVue from '@/components/EditableTableVue.vue';
+import MarkChargesPaid from '@/components/MarkChargesPaid.vue';
 // import PageLoader from '@/components/PageLoader.vue';
 export default {
     name: 'AdminDashboard',
@@ -225,7 +226,8 @@ export default {
         UserRegistration,
         AddCharges,
         AddEvent,
-        EditableTableVue
+        EditableTableVue,
+        MarkChargesPaid
     }
 }
 </script>
