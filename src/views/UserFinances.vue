@@ -10,7 +10,7 @@
             <h2>We noticed your profile hasn't been updated in {{ lastUpdated }} months</h2>
             <UserInformationEditor></UserInformationEditor>
         </div>
-        <div v-if="financesMode">
+        <div>
             <div class="pie-chart-outer" v-if="charges">
                 <div class="pie-chart-inner">
                     <PieChart :pieData="pieChartData" v-if="!dataIsLoading"></PieChart>
@@ -22,6 +22,10 @@
             <p class="show-paid" @click="this.showPaidCharges = !this.showPaidCharges"
                 v-if="paidCharges && this.showPaidCharges">Hide Paid Charges</p>
             <TableVue :data="paidCharges" v-if="showPaidCharges"></TableVue>
+        </div>
+        <div class="reimbursement-form">
+            <a href="https://forms.gle/ms4Bqp18g6U8riv67" target="_blank" rel="noopener noreferrer">Reimbursement Request
+                Form</a>
         </div>
     </div>
 </template>
@@ -163,5 +167,19 @@ th {
 
 tr:nth-child(even) {
     background-color: #dddddd;
+}
+
+div .reimbursement-form {
+    all: revert;
+    /* background-color: red; */
+    text-align: right;
+    width: 95%;
+    margin: 5px auto;
+
+}
+
+div .reimbursement-form a {
+    color: black;
+    /* padding: 18.762px; */
 }
 </style>

@@ -198,7 +198,6 @@ export default {
                 else {
                     // console.log(data);
                     this.loading = false;
-
                     this.goToDashboard();
                 }
             }

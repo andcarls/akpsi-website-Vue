@@ -26,9 +26,25 @@
                     Alumni Directory
                 </li>
             </ul> -->
-            <div class="sign-out">
-                <button class="sign-out" @click="signOut">Sign Out</button>
-            </div>
+            <li class="profile-dropdown">
+                <div class="dropdown-outer">
+
+                    <img src="../assets/profile.png" alt="profile dropdown" class="profile-dropdown"
+                        @click="showDropdown = !showDropdown">
+                    <ul class="dropdown-menu" v-show="showDropdown">
+                        <li>
+                            <router-link to="/UserInformation">My Profile</router-link>
+                        </li>
+                        <li>
+                            <div class="sign-out">
+                                <button class="sign-out" @click="signOut">Sign Out</button>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
         </ul>
     </nav>
 </template>
@@ -46,6 +62,11 @@ export default {
             console.log('update this bitch');
             this.$emit('financeMode');
         }
+    },
+    data() {
+        return {
+            showDropdown: false,
+        }
     }
 }
 </script>
@@ -53,18 +74,34 @@ export default {
 
 
 <style scoped>
+ul .dropdown-menu {
+    background-color: #5078a0dc;
+    border-radius: 5px;
+    position: absolute;
+    display: block;
+    right: 0px;
+}
+
+ul .dropdown-menu li {}
+
+.profile-dropdown img {
+    height: 50px;
+    padding: 5px;
+}
+
 nav {
     background-color: #0A66C2;
     margin: 0;
     padding: 0;
     text-align: center;
+    height: 94px;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     display: flex;
     justify-content: space-between;
     /* flex-wrap: wrap; */

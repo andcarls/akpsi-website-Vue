@@ -1,7 +1,8 @@
 <template>
     <h1 @click="show = !show" style="text-decoration: underline;">Adding Users</h1>
     <div v-if="show">
-        <p>Check especially email correctness, as it is relevant to authentication.</p>
+        <p>Check especially email correctness, as it is relevant to authentication and must be changed within a user's
+            profile (one by one, that is - see subtext under "Edit Tables").</p>
         <p>Tab to add additional rows.</p>
         {{ newUsers }}
         <div v-for="(user, key) in newUsers" :key="key">

@@ -4,7 +4,7 @@
         <h1 style="color: white;margin: 0; padding: 0;">You don't belong here.</h1>
         <img src="../../assets/Unauthorized_access.jpg" style="width: 100%" />
     </div>
-    <div v-else style="width: 100%">
+    <div v-else style="width: 100%" class="outer-container">
         <p>
             Notes: I don't provide delete functionality on some tables.
             Deleting data on tables that have linked data can have unexpected results and create errors.
@@ -39,7 +39,7 @@
             </p>
             <p v-if="showUserInfo">
                 Email is linked to authentication. For this reason, only users can change their email via their profile.
-                If they no longer have access to their email, you or they are able to login via password on the admin
+                If they no longer have access to thei r email, you or they are able to login via password on the admin
                 dashboard --
                 master password should be shared with you. They will then just need to type in the correct URL link (e.g.
                 .../Finances), and then they can continue to edit their data.
@@ -50,12 +50,18 @@
             <EditableTableVue :data="chargesData" @update-cell="updateCharges" @refresh-table="refreshCharges"
                 v-if="showUserCharges">
             </EditableTableVue>
-            <h1 style="text-decoration: underline;"> </h1>
+            <button v-if="showUserCharges" @click="toggleShowPaid">Toggle Paid</button>
         </div>
+        <h1 @click="showMarkChargesPaid = !showMarkChargesPaid" style="text-decoration: underline;">Mark Charges Paid</h1>
+
+        <h1 @click="showSendEmailReminders = !showSendEmailReminders" style="text-decoration: underline;">Send Email
+            Reminders</h1>
 
 
     </div>
 </template>
+
+<style scoped></style>
 
 <script>
 import { supabase } from '@/lib/supabase';
@@ -77,6 +83,8 @@ export default {
             showEvents: false,
             showUserInfo: false,
             showUserCharges: false,
+            chargesPaid: false,
+            showMarkChargesPaid: false,
         }
     },
     async beforeMount() {
@@ -89,10 +97,18 @@ export default {
         this.isAdmin = true;
         this.eventsData = await this.fetchEvents();
         this.chargesData = await this.fetchChargesData();
+        this.chargesPaid = this.chargesData.filter(item => {
+            return !item.paid;
+        });
         this.userData = await this.fetchUserInformation();
         this.isLoading = false;
     },
     methods: {
+        toggleShowPaid() {
+            let temp = this.chargesData;
+            this.chargesData = this.chargesPaid;
+            this.chargesPaid = temp;
+        },
         async checkAdmin() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user.email == 'vp.finance@akpsi-phi.com' || user.email == 'andcarls@umich.edu') {
@@ -191,6 +207,9 @@ export default {
         },
         async refreshCharges() {
             this.chargesData = await this.fetchChargesData();
+            this.chargesPaid = this.chargesData.filter(item => {
+                return !item.paid;
+            });
         },
         async updateCharges(data, item) {
             const { error } = await supabase.from('user_charges')
@@ -210,3 +229,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.outer-container {
+    padding: 20px;
+    height: 100vh;
+}
+</style>
