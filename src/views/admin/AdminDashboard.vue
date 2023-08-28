@@ -35,11 +35,22 @@
             </EditableTableVue>
             <h2 @click="showUserInfo = !showUserInfo" style="text-decoration: underline;">User Info</h2>
             <p v-if="showUserInfo">All user info is shown -- brothers and alumni. You may see cols on brothers not yet
-                filled out relevant to alumni. This is simply hidden data until graduation.</p>
+                filled out relevant to alumni. This is simply hidden data until graduation.
+            </p>
+            <p v-if="showUserInfo">
+                Email is linked to authentication. For this reason, only users can change their email via their profile.
+                If they no longer have access to their email, you or they are able to login via password on the admin
+                dashboard --
+                master password should be shared with you. They will then just need to type in the correct URL link (e.g.
+                .../Finances), and then they can continue to edit their data.
+            </p>
             <EditableTableVue :data="userData" @update-cell="updateUserInfo" @refresh-table="refreshUserInfo"
                 v-if="showUserInfo"></EditableTableVue>
             <h2 @click="showUserCharges = !showUserCharges" style="text-decoration: underline;">User Charges</h2>
-            <EditableTableVue :data="chargesData"></EditableTableVue>
+            <EditableTableVue :data="chargesData" @update-cell="updateCharges" @refresh-table="refreshCharges"
+                v-if="showUserCharges">
+            </EditableTableVue>
+            <h1 style="text-decoration: underline;"> </h1>
         </div>
 
 
@@ -100,11 +111,17 @@ export default {
         },
         async fetchChargesData() {
             const { data, error } = await supabase.from('user_charges').select(`
-            notes,
+            *,
+            user_information (
+                first_name,
+                last_name,
+                email
+            ),
             events (
                 event_name
-                )
-                `);
+            )
+                `)
+                .order('id');
             if (error) {
                 alert(error.message);
             }
@@ -112,13 +129,25 @@ export default {
                 return data.map(row => {
                     const newRow = {
                         event_name: null,
+                        user_name: null,
+                        user_email: null,
                         ...row,
                     };
                     if (newRow.events && newRow.events.event_name) {
                         newRow.event_name = newRow.events.event_name;
-                        delete newRow.events;
                     }
-                    console.log(newRow);
+                    if (newRow.user_information) {
+                        if (newRow.user_information.first_name && newRow.user_information.last_name) {
+                            newRow.user_name = newRow.user_information.first_name + " " + newRow.user_information.last_name;
+                        }
+                        if (newRow.user_information.email) {
+                            newRow.user_email = newRow.user_information.email;
+                        }
+                    }
+
+
+                    delete newRow.events;
+                    delete newRow.user_information;
                     return newRow;
                 });
             }
@@ -145,6 +174,10 @@ export default {
             this.eventsData = await this.fetchEvents();
         },
         async updateUserInfo(data, item) {
+            if (Object.keys(data)[0] == "email") {
+                alert('only users can change their email via their profile. If they no longer have access to their email, you or they are able to login via password on the admin dashboard -- master password should be shared with you. They will then just need to type in the correct URL link (e.g. .../Finances), and then they can continue to edit their data.');
+                return;
+            }
             const { error } = await supabase.from('user_information')
                 .update(data)
                 .eq('user_id', item.user_id);
@@ -155,7 +188,19 @@ export default {
         },
         async refreshUserInfo() {
             this.userData = await this.fetchUserInformation();
-        }
+        },
+        async refreshCharges() {
+            this.chargesData = await this.fetchChargesData();
+        },
+        async updateCharges(data, item) {
+            const { error } = await supabase.from('user_charges')
+                .update(data)
+                .eq('id', item.id);
+            if (error) {
+                alert('Error' + error.message);
+                alert('Please refresh table to ensure properly updated data.');
+            }
+        },
     },
     components: {
         UserRegistration,
