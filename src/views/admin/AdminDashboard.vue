@@ -56,12 +56,13 @@
 
         <h1 @click="showSendEmailReminders = !showSendEmailReminders" style="text-decoration: underline;">Send Email
             Reminders</h1>
-
+        <button @click="testEmail">Test Email</button>
 
     </div>
 </template>
 
 <style scoped></style>
+
 
 <script>
 import { supabase } from '@/lib/supabase';
@@ -103,6 +104,7 @@ export default {
         });
         this.userData = await this.fetchUserInformation();
         this.isLoading = false;
+
     },
     methods: {
         toggleShowPaid() {
