@@ -43,7 +43,7 @@ const routes = [
     path: '/AdminDashboard',
     name: 'AdminDashboard',
     component: AdminDashboard
-  }
+  },
 ]
 
 const router = createRouter({
