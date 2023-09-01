@@ -53,10 +53,7 @@
             <button v-if="showUserCharges" @click="toggleShowPaid">Toggle Paid</button>
         </div>
         <MarkChargesPaid></MarkChargesPaid>
-
-        <h1 @click="showSendEmailReminders = !showSendEmailReminders" style="text-decoration: underline;">Send Email
-            Reminders</h1>
-        <button @click="testEmail">Test Email</button>
+        <SendEmails></SendEmails>
 
     </div>
 </template>
@@ -71,6 +68,7 @@ import AddCharges from '@/components/AddCharges.vue';
 import AddEvent from '@/components/AddEvent.vue';
 import EditableTableVue from '@/components/EditableTableVue.vue';
 import MarkChargesPaid from '@/components/MarkChargesPaid.vue';
+import SendEmails from '@/components/SendEmails.vue';
 
 
 // import { getFunctions, httpsCallable } from "firebase/functions"
@@ -109,43 +107,6 @@ export default {
         this.isLoading = false;
     },
     methods: {
-        async testEmail() {
-
-            const { data, error } = await supabase.rpc('send_email_message', {
-                message: {
-                    sender: "vp.finance@akpsi-phi.com",
-                    recipient: "andcarls@umich.edu",
-                    subject: "This is a test message from my Supabase app!",
-                    html_body: `You owe me money... <table>
-                        < tr >
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr >
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
-</table > `,
-                }
-            }
-            );
-            if (error) {
-                console.log(error, error.message);
-            }
-            else {
-                console.log(data);
-            }
-
-
-        },
-
         toggleShowPaid() {
             let temp = this.chargesData;
             this.chargesData = this.chargesPaid;
@@ -268,7 +229,8 @@ export default {
         AddCharges,
         AddEvent,
         EditableTableVue,
-        MarkChargesPaid
+        MarkChargesPaid,
+        SendEmails
     }
 }
 </script>
