@@ -8,7 +8,7 @@
             <header>
                 <nav>
                     <ul>
-                        <li>
+                        <li @dblclick="goToAdminLogin">
                             <img src="../assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
                         </li>
                         <li>
@@ -77,22 +77,9 @@ export default {
             console.log('to dashboard!');
             this.$router.go('/Finances');
         },
-        // async handleLogin(value) {
-        //     let type = this.checkPhoneOrEmail(value);
-        //     console.log(type);
-        //     if (type == 'phone') {
-        //         this.otpLogin(value);
-        //     }
-        //     else if (type == 'email') {
-        //         this.magicLogin(value);
-        //     }
-        //     else {
-        //         this.loginError = true;
-        //         this.errorMessage = "Improperly formatted email or phone";
-        //         this.supabaseLogin();
-        //         // console.log('invalid email or phone');
-        //     }
-        // },
+        async goToAdminLogin() {
+            this.$router.push('/Admin');
+        },
         checkPhoneOrEmail(value) {
             // Regular expression for matching phone numbers
             const phoneRegex = /^(\+\d{1,3})?(\s?\d{2,4}){3}$/;
