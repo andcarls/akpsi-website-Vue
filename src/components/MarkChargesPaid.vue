@@ -6,6 +6,8 @@
     see https://github.com/shentao/vue-multiselect-->
         <!-- <multiselect v-model="selectedUsers" :options="brothers"></multiselect> -->
         <h2>Select Brothers*</h2>
+        <button @click="includeAlum">include alumni</button>
+        <br><br>
         <VueMultiselect v-model="selectedUsers" :options="brothers" :multiple="true" :close-on-select="false"
             :clear-on-select="true" :preserve-search="true" track-by="name" placeholder="Pick some"
             :custom-label="nameWithEmail" group-values="options" group-label="groupLabel">
@@ -49,20 +51,29 @@ export default {
         }
     },
     methods: {
+        includeAlum() {
+            this.fetchBrothers(true);
+        },
         nameWithEmail({ first_name, last_name, email }) {
             return `${first_name} ${last_name} (${email})`;
         },
-        async fetchBrothers() {
+        async fetchBrothers(includeAlumni) {
             let { data } = await supabase.from('user_information').select(`user_id, first_name, last_name, email, graduation_year`);
             let currDate = new Date();
             let gradYear;
-            if (currDate.getMonth() > 6) {
-                gradYear = currDate.getFullYear();
+            if (!includeAlumni) {
+                console.log('filter out alum');
+                if (currDate.getMonth() > 6) {
+                    gradYear = currDate.getFullYear();
+                }
+                else {
+                    gradYear = currDate.getFullYear() - 1;
+                }
+                this.brothers[0].options = data.filter(user => user.graduation_year > gradYear);
             }
             else {
-                gradYear = currDate.getFullYear() - 1;
+                this.brothers[0].options = data;
             }
-            this.brothers[0].options = data.filter(user => user.graduation_year > gradYear);
         },
         async fetchEvents() {
             let { data } = await supabase.from('events').select('*');

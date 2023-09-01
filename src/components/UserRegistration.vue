@@ -12,11 +12,16 @@
             <input v-model="user.grad_year" placeholder="Graduation Year" @keydown.tab="addRow(key)">
         </div>
         <br />
+        <label>Service Key</label>
+        <input type="text" placeholder="Enter Your Service Key" v-model="serviceKey">
+        <br />
         <button @click="addUsers">Save</button>
+        {{ successMsg }}
     </div>
 </template>
 
 <script>
+import { createClient } from '@supabase/supabase-js';
 export default {
     data() {
         return {
@@ -24,8 +29,9 @@ export default {
                 {
                 }
             ],
-            show: false
-
+            show: false,
+            serviceKey: null,
+            successMsg: null,
         }
     },
     methods: {
@@ -34,19 +40,71 @@ export default {
                 this.newUsers.push({});
             }
         },
-        addUsers() {
+        checkNewUsers() {
+            this.newUsers.forEach(user => {
+                if (!user.first_name || !user.last_name || !user.email || !user.gradYear) {
+                    return false;
+                }
+                if (user.first_name == "" || user.last_name == "" || user.email == "" || user.gradYear == "") {
+                    return false;
+                }
+            });
+        },
+        async addUsers() {
+            // Error check
+            if (!this.checkNewUsers()) {
+                alert('Fill out all information for each user.');
+                return;
+            }
             if (!confirm('Are you sure? Have you double checked emails?')) {
                 return;
             }
-            console.log(this.newUsers);
-            this.newUsers = [
-                {
-                    first_name: null,
-                    last_name: null,
-                    email: null,
-                    grad_year: null
+            const supabase = createClient('https://ahuptqdhadtbesxvhuzz.supabase.co', this.serviceKey, {
+                auth: {
+                    autoRefreshToken: false,
+                    persistSession: false
                 }
-            ]
+            });
+            const { data: masterPass } = await supabase.from('private').select('value').eq('key', 'MASTER_PASSWORD').single();
+
+            // eslint-disable-next-line
+            const adminAuthClient = supabase.auth.admin;
+
+            console.log(this.newUsers);
+            for (let i = 0; i < this.newUsers.length; ++i) {
+                const { data, error } = await supabase.auth.admin.createUser({
+                    email: this.newUsers[i].email,
+                    email_confirm: true,
+                    password: masterPass.value,
+                })
+                if (error) {
+                    alert(error.message);
+                    console.log(error);
+                    alert('user regisration failed at: ' + this.newUsers[i].email);
+                    return;
+                }
+                else {
+                    console.log(data);
+                    let user = {
+                        user_id: data.user.id,
+                        email: data.user.email,
+                        first_name: this.newUsers[i].first_name,
+                        last_name: this.newUsers[i].last_name,
+                        graduation_year: this.newUsers[i].graduation_year
+                    }
+                    const { error } = await supabase.from('user_information')
+                        .insert(user);
+                    if (error) {
+                        alert(error.message);
+                        alert('failed on user: ' + data.user.email)
+                        console.log(error);
+                        return;
+                    }
+                    this.successMsg += this.newUsers[i].email;
+                    this.successMsg += ', ';
+                }
+            }
+
         }
     },
     name: 'UserRegistration',

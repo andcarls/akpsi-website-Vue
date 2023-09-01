@@ -99,7 +99,16 @@ export default {
         }
         this.isAdmin = true;
         this.eventsData = await this.fetchEvents();
-        this.chargesData = await this.fetchChargesData();
+        let chargesDataWithAlum = await this.fetchChargesData();
+        let currDate = new Date();
+        let gradYear;
+        if (currDate.getMonth() > 6) {
+            gradYear = currDate.getFullYear();
+        }
+        else {
+            gradYear = currDate.getFullYear() - 1;
+        }
+        this.chargesData = chargesDataWithAlum.filter(item => item.graduation_year > gradYear);
         this.chargesPaid = this.chargesData.filter(item => {
             return !item.paid;
         });
@@ -134,7 +143,8 @@ export default {
             user_information (
                 first_name,
                 last_name,
-                email
+                email,
+                graduation_year
             ),
             events (
                 event_name
@@ -150,6 +160,7 @@ export default {
                         event_name: null,
                         user_name: null,
                         user_email: null,
+                        graduation_year: null,
                         ...row,
                     };
                     if (newRow.events && newRow.events.event_name) {
@@ -161,6 +172,9 @@ export default {
                         }
                         if (newRow.user_information.email) {
                             newRow.user_email = newRow.user_information.email;
+                        }
+                        if (newRow.user_information.graduation_year) {
+                            newRow.graduation_year = newRow.user_information.graduation_year;
                         }
                     }
 
