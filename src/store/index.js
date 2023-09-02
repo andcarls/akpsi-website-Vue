@@ -83,7 +83,20 @@ export default createStore({
       let session = data.session;
       let { data: result } = await supabase
         .from('user_information')
-        .select('last_updated, first_name, last_name, uniqname, graduation_year, college, industry')
+        .select(`last_updated, 
+                first_name, 
+                last_name, 
+                uniqname, 
+                graduation_year, 
+                college,
+                phone,
+                major,
+                minor,
+                clubs,
+                internships,
+                full_time,
+                personal_email
+                `)
         .eq('user_id', session.user.id)
         .single();
       let userName = result.first_name;
@@ -177,7 +190,14 @@ export default createStore({
                     last_name,
                     email,
                     phone,
-                    graduation_year
+                    graduation_year,
+                    college,
+                    major,
+                    minor,
+                    clubs,
+                    internships,
+                    full_time,
+                    personal_email
                     `)
           .order('last_name');
         if (error) { throw error; }
@@ -208,9 +228,15 @@ export default createStore({
           bInfo = bInfo
             .map(item => ({
               'Name': item.first_name || item.last_name ? item.first_name + ' ' + item.last_name : '...',
-              'Email': item.school_email ? item.school_email : '...',
+              'Email': item.email ? item.email : '...',
               'Phone': item.phone ? item.phone : '...',
               'Grad year': item.graduation_year ? item.graduation_year : '...',
+              'College(s)': item.college || '...',
+              'Major(s)': item.major || '...',
+              'Minor(s)': item.minor || '...',
+              'Club(s)': item.clubs || '...',
+              'Internship(s)': item.internships || '...',
+              'Full Time': item.full_time || '...',
             }));
         }
         else {
@@ -239,9 +265,16 @@ export default createStore({
           alumniInfo = alumniInfo
             .map(item => ({
               'Name': item.first_name || item.last_name ? item.first_name + ' ' + item.last_name : '...',
-              'Email': item.school_email ? item.school_email : '...',
+              'Email': item.email ? item.email : '...',
+              'Personal Email': item.personal_email || '...',
               'Phone': item.phone ? item.phone : '...',
               'Grad year': item.graduation_year ? item.graduation_year : '...',
+              'College(s)': item.college || '...',
+              'Major(s)': item.major || '...',
+              'Minor(s)': item.minor || '...',
+              'Club(s)': item.clubs || '...',
+              'Internship(s)': item.internships || '...',
+              'Full Time': item.full_time,
             }));
         }
         else {

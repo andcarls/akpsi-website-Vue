@@ -4,13 +4,13 @@
     {{ bDirectoryMode }}
     {{ aDirectoryMode }} -->
     <div id="app" v-if="!dataIsLoading">
-        <navBar></navBar>
+        <navBar v-if="!needsUpdate"></navBar>
         <p style="text-align: center;">Welcome, {{ userName }}</p>
-        <div v-if="needsUpdate">
+        <div v-if="needsUpdate" class="profile-updater">
             <h2>We noticed your profile hasn't been updated in {{ lastUpdated }} months</h2>
-            <UserInformationEditor></UserInformationEditor>
+            <UserInformationEditor @success="refreshPage"></UserInformationEditor>
         </div>
-        <div>
+        <div v-if="!needsUpdate">
             <div class="pie-chart-outer" v-if="charges">
                 <div class="pie-chart-inner">
                     <PieChart :pieData="pieChartData" v-if="!dataIsLoading"></PieChart>
@@ -18,12 +18,13 @@
             </div>
             <TableVue :data="charges" :emptyMessage="`Congratulations! You're debt free.`"></TableVue>
             <p class="show-paid" @click="this.showPaidCharges = !this.showPaidCharges"
-                v-if="paidCharges && !this.showPaidCharges">Show Paid Charges</p>
+                v-if="paidCharges && !this.showPaidCharges" style="width:fit-content;">Show Paid Charges</p>
             <p class="show-paid" @click="this.showPaidCharges = !this.showPaidCharges"
-                v-if="paidCharges && this.showPaidCharges">Hide Paid Charges</p>
-            <TableVue :data="paidCharges" v-if="showPaidCharges"></TableVue>
+                v-if="paidCharges && this.showPaidCharges" style="width:fit-content;">Hide Paid Charges</p>
+            <TableVue :data="paidCharges" v-if="showPaidCharges">
+            </TableVue>
         </div>
-        <div class="reimbursement-form">
+        <div class="reimbursement-form" v-if="!needsUpdate">
             <a href="https://forms.gle/ms4Bqp18g6U8riv67" target="_blank" rel="noopener noreferrer">Reimbursement Request
                 Form</a>
         </div>
@@ -88,6 +89,9 @@ export default {
                 })
             }
         },
+        refreshPage() {
+            location.reload();
+        }
     },
 
     async beforeMount() {
@@ -124,12 +128,12 @@ body {
 }
 
 .pie-chart-outer {
-    width: 100vw;
+    width: 100%;
     text-align: center;
 }
 
 .pie-chart-inner {
-    width: 70vw;
+    width: 70%;
     max-width: 500px;
     /* justify-content: center; */
     /* text-align: center; */
@@ -181,5 +185,11 @@ div .reimbursement-form {
 div .reimbursement-form a {
     color: black;
     /* padding: 18.762px; */
+}
+</style>
+
+<style scoped>
+div .profile-updater {
+    padding: 30px;
 }
 </style>

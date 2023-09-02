@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <ul>
+        <ul class="nav-container">
             <div class="logo">
                 <img class="logo" src="../assets/AKPsi-coat-of-arms.png" alt="AKPsi Letters">
             </div>
@@ -73,12 +73,20 @@ export default {
 
 
 <style scoped>
+ul {
+    height: 94px;
+}
+
+div .dropdown-outer {
+    display: inline block;
+}
+
 ul .dropdown-menu {
     background-color: #5078a0dc;
     border-radius: 5px;
-    position: absolute;
     display: block;
     right: 0px;
+    height: 100%;
 }
 
 ul .dropdown-menu li {}
@@ -110,13 +118,13 @@ nav ul {
 nav ul li {
     margin: auto;
     padding: 5px;
-    font-family: 'Times New Roman', Times, serif;
+    /* font-family: 'Times New Roman', Times, serif; */
     font-size: larger;
     color: white;
 }
 
 nav ul li a {
-    font-family: 'Times New Roman', Times, serif;
+    /* font-family: 'Times New Roman', Times, serif; */
     color: white;
     text-decoration: none;
     padding: 10px;

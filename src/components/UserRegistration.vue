@@ -6,10 +6,10 @@
         <p>Tab to add additional rows.</p>
         {{ newUsers }}
         <div v-for="(user, key) in newUsers" :key="key">
-            <input v-model="user.first_name" placeholder="First Name">
-            <input v-model="user.last_name" placeholder="Last Name">
-            <input v-model="user.email" placeholder="Email">
-            <input v-model="user.grad_year" placeholder="Graduation Year" @keydown.tab="addRow(key)">
+            <input v-model="user.first_name" placeholder="First Name" required>
+            <input v-model="user.last_name" placeholder="Last Name" required>
+            <input v-model="user.email" placeholder="Email" required>
+            <input v-model="user.grad_year" placeholder="Graduation Year" @keydown.tab="addRow(key)" required>
         </div>
         <br />
         <label>Service Key</label>
@@ -42,18 +42,20 @@ export default {
         },
         checkNewUsers() {
             this.newUsers.forEach(user => {
-                if (!user.first_name || !user.last_name || !user.email || !user.gradYear) {
+                if (!user.first_name || !user.last_name || !user.email || !user.grad_year) {
+                    console.log(user);
                     return false;
                 }
                 if (user.first_name == "" || user.last_name == "" || user.email == "" || user.gradYear == "") {
                     return false;
                 }
             });
+            return true;
         },
         async addUsers() {
             // Error check
             if (!this.checkNewUsers()) {
-                alert('Fill out all information for each user.');
+                alert('Fill out all information for each user. Check console for incomplete row');
                 return;
             }
             if (!confirm('Are you sure? Have you double checked emails?')) {
@@ -90,10 +92,12 @@ export default {
                         email: data.user.email,
                         first_name: this.newUsers[i].first_name,
                         last_name: this.newUsers[i].last_name,
-                        graduation_year: this.newUsers[i].graduation_year
+                        graduation_year: this.newUsers[i].grad_year
                     }
+                    console.log(user);
                     const { error } = await supabase.from('user_information')
                         .insert(user);
+                    console.log(error);
                     if (error) {
                         alert(error.message);
                         alert('failed on user: ' + data.user.email)
@@ -105,6 +109,10 @@ export default {
                 }
             }
 
+            this.newUsers = [
+                {
+                }
+            ];
         }
     },
     name: 'UserRegistration',

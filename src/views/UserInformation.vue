@@ -1,6 +1,13 @@
 <template>
     <NavBar></NavBar>
-    <UserInformationEditor></UserInformationEditor>
+    <div class="outer">
+        <div class="inner">
+            <UserInformationEditor></UserInformationEditor>
+
+            <p>To update email, name, or graduation year, please contact your VP Finance</p>
+        </div>
+
+    </div>
 </template>
 
 <script>
@@ -12,3 +19,15 @@ export default {
     components: { UserInformationEditor, NavBar }
 }
 </script>
+
+<style scoped>
+div .outer {
+    padding: 15px;
+    width: 100%;
+
+}
+
+div .inner {
+    margin: 10px auto;
+}
+</style>
