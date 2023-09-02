@@ -27,10 +27,9 @@
                 </li>
             </ul> -->
             <li class="profile-dropdown">
-                <div class="dropdown-outer">
+                <div class="dropdown-outer" @click="showDropdown = !showDropdown">
 
-                    <img src="../assets/profile.png" alt="profile dropdown" class="profile-dropdown"
-                        @click="showDropdown = !showDropdown">
+                    <img src="../assets/profile.png" alt="profile dropdown" class="profile-dropdown">
                     <ul class="dropdown-menu" v-show="showDropdown">
                         <li>
                             <router-link to="/UserInformation">My Profile</router-link>
