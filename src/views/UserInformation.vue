@@ -29,5 +29,6 @@ div .outer {
 
 div .inner {
     margin: 10px auto;
+    width: 50%;
 }
 </style>

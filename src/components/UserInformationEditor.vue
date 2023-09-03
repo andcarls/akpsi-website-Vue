@@ -214,7 +214,7 @@ form {
     background-color: #f2f2f2;
     padding: 30px;
     margin-left: 2 0px;
-    width: 40%;
+    width: 100%;
 }
 
 div {

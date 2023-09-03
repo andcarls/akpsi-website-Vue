@@ -2,7 +2,7 @@
     <h1 style="text-align: center;" v-if="!tableData">{{ emptyMsg }}</h1>
     <div class="table-container" v-if="tableData">
         <div class="search-bar">
-            <customInput v-model="search" :placeHolder="'Search'" type="text"></customInput>
+            <customInput v-model="search" :placeHolder="'Search'" type="text" @keyup.enter="setSearch"></customInput>
         </div>
         <table>
             <tr>
@@ -28,7 +28,8 @@ export default {
     data() {
         return {
             debt: true,
-            search: ''
+            search: '',
+            currSearch: '',
         }
     },
     computed: {
@@ -41,7 +42,7 @@ export default {
             get() {
                 return this.data.filter(row => {
                     for (const col in row) {
-                        if (row[col].toString().toLowerCase().includes(this.search.toLowerCase())) {
+                        if (row[col].toString().toLowerCase().includes(this.currSearch.toLowerCase())) {
                             return true;
                         }
                     }
@@ -57,9 +58,13 @@ export default {
     },
     methods: {
         highlightMatch(text) {
-            const regex = new RegExp(`(${this.search})`, 'gi');
+            const regex = new RegExp(`(${this.currSearch})`, 'gi');
             return text.toString().replace(regex, '<span class="highlight" style="background-color: #ebeb0096;">$1</span>');
+        },
+        setSearch() {
+            this.currSearch = this.search;
         }
+
     },
     components: {
         customInput
