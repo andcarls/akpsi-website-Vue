@@ -9,7 +9,7 @@
         <button @click="includeAlum">include alumni</button>
         <br><br>
         <VueMultiselect v-model="selectedUsers" :options="brothers" :multiple="true" :close-on-select="false"
-            :clear-on-select="true" :preserve-search="true" track-by="name" placeholder="Pick some"
+            :clear-on-select="true" :preserve-search="true" track-by="user_id" placeholder="Pick some"
             :custom-label="nameWithEmail" group-values="options" group-label="groupLabel">
         </VueMultiselect>
         <h2>Select Event*</h2>
