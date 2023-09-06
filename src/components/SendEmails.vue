@@ -135,7 +135,7 @@ export default {
                     </tr>
                 `).join('')}
             </table>
-            <p>Thank you for your prompt attention to this matter.</p>
+            <p>Zelle can be sent to vp.finance@akpsi-phi.com. Thank you for your prompt attention to this matter. Don't hesitate to reach out if there are any issues.</p>
             <p>Sincerely,<br />VP-Finance</p>
         </body>
         </html>
