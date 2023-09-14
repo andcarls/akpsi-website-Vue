@@ -11,9 +11,6 @@
             :preserve-search="true" track-by="user_id" placeholder="Pick some" :custom-label="nameWithEmail"
             group-values="options" group-label="groupLabel" :group-select="true">
         </VueMultiselect>
-        <!-- <VueMultiselect v-model="selectedUsers" :options="brothers2" :multiple="true" track-by="user_id"
-            placeholder="Pick some" :custom-label="nameWithEmail">
-        </VueMultiselect> -->
         <h2>Select Event*</h2>
         <VueMultiselect v-model="selectedEvent" :options="events" placeholder="Pick one" label="event_name">
         </VueMultiselect>
@@ -53,12 +50,14 @@ export default {
             events: [],
             brothers: [
                 {
-                    groupLabel: 'Select All Brothers',
-                    options: [
-                    ]
+                    groupLabel: 'Seniors',
+                    options: []
+                },
+                {
+                    groupLabel: 'Non-Seniors',
+                    options: []
                 }
             ],
-            brothers2: [],
         }
     },
     methods: {
@@ -75,9 +74,8 @@ export default {
             else {
                 gradYear = currDate.getFullYear() - 1;
             }
-            this.brothers[0].options = data.filter(user => user.graduation_year > gradYear);
-            this.brothers2 = this.brothers[0].options;
-            console.log(this.brothers2.length);
+            this.brothers[0].options = data.filter(user => user.graduation_year == gradYear + 1);
+            this.brothers[1].options = data.filter(user => user.graduation_year > gradYear + 1);
         },
         async fetchEvents() {
             let { data } = await supabase.from('events').select('*');
