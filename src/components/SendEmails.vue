@@ -90,55 +90,68 @@ export default {
                 const user = chargesByUser[userId];
                 const html_body = `
         <html>
-        <head>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                }
-                p {
-                    margin: 0;
-                    padding: 0;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 20px;
-                }
-                th, td {
-                    text-align: left;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-                tr:nth-child(even) {
-                    background-color: #f2f2f2;
-                }
-            </style>
-        </head>
-        <body>
-            <p>Hello ${user.name},</p>
-            <p>You have outstanding debts due to AKPsi-Phi. Please see the details below:</p>
-            <table>
-                <tr>
-                    <th>Event Name</th>
-                    <th>Amount</th>
-                    <th>Due Date</th>
-                </tr>
-                ${user.charges.map(charge => `
-                    <tr>
-                        <td>${charge.event_name}</td>
-                        <td>${charge.amount}</td>
-                        <td>${charge.due_date}</td>
-                    </tr>
-                `).join('')}
-            </table>
-            <p>Zelle can be sent to vp.finance@akpsi-phi.com. Thank you for your prompt attention to this matter. Don't hesitate to reach out if there are any issues.</p>
-            <p>Sincerely,<br />VP-Finance</p>
-        </body>
-        </html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Hello ${user.name},</p>
+    <p>You have outstanding debts due to AKPsi-Phi. Please see the details below:</p>
+    <table>
+        <tr>
+            <th>Event Name</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+        </tr>
+        ${user.charges.map(charge => `
+        <tr>
+            <td>${charge.event_name}</td>
+            <td>${charge.amount}</td>
+            <td>${charge.due_date}</td>
+        </tr>
+        `).join('')}
+    </table>
+    <br>
+    <p>Zelle can be sent to vp.finance@akpsi-phi.com.</p>
+    <p>You may <a href="https://akpsi-phi-access.netlify.app/">log in</a> to view your charges. Reply to this email if
+        you believe it was sent in error.</p>
+    <br>
+    <p>Best,<br />VP-Finance</p>
+</body>
+
+</html>
     `;
                 let message = {
                     sender: 'AKPsi-Phi VP-Finance <vp.finance@akpsi-phi.com>',
