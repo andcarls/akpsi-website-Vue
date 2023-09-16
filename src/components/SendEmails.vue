@@ -27,6 +27,56 @@ export default {
         }
     },
     methods: {
+        // async sendMassReminders() {
+        //     const { data, error } = await supabase.from('user_charges')
+        //         .select(`
+        //         user_id,
+        //         amount,
+        //         due_date,
+        //         user_information (
+        //         first_name,
+        //         email,
+        //         graduation_year
+        //     ),
+        //     events (
+        //         event_name
+        //     )
+        //         `).eq('paid', false);
+        //     let currDate = new Date();
+        //     let gradYear;
+        //     if (currDate.getMonth() > 6) {
+        //         gradYear = currDate.getFullYear();
+        //     }
+        //     else {
+        //         gradYear = currDate.getFullYear() - 1;
+        //     }
+        //     let userCharges = null;
+        //     if (data && data.length != 0) {
+        //         userCharges = data.filter(item => item.user_information.graduation_year > gradYear);
+        //     }
+        //     console.log(userCharges);
+        //     if (error) {
+        //         alert(error.message);
+        //         return;
+        //     }
+
+        //     let chargesByEvent = {};
+        //     userCharges.forEach(charge => {
+        //         const eventName = charge.events.event_name;
+
+        //         if (!chargesByEvent[eventName]) {
+        //             chargesByEvent[eventName] = {
+
+        //             };
+        //             numEmails++;
+        //         }
+        //         chargesByUser[userId].charges.push({
+        //             event_name: charge.events.event_name,
+        //             amount: charge.amount,
+        //             due_date: charge.due_date || 'N/A'
+        //         });
+        //     });
+        // },
         async sendToAllWithDebts() {
             const { data, error } = await supabase.from('user_charges')
                 .select(`
@@ -161,8 +211,15 @@ export default {
                 };
                 const { data, error } = await supabase.rpc('send_email_message', { message });
                 if (error) {
-                    alert(error.message);
-                    alert('Stopping emails... see messages table on Supabase for error logs and sent emails');
+                    alert(error.message + " see console...");
+                    console.log('waiting 1s and reattempting');
+                    setTimeout(null, 1000);
+                    const { data, e2: error } = await supabase.rpc('send_email_message', { message });
+                    if (e2) {
+                        console.log(e2.message);
+                        console.log('failed second attempt, continuing without ' + message.recipient + " message sent");
+                    }
+                    // alert('Stopping emails... see messages table on Supabase for error logs and sent emails');
                     return;
                 }
                 else {
