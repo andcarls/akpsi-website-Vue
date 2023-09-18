@@ -205,7 +205,7 @@ export default {
     `;
                 let message = {
                     sender: 'AKPsi-Phi VP-Finance <vp.finance@akpsi-phi.com>',
-                    recipient: user.email,
+                    recipient: 'canes17862@twugg.com',
                     subject: '[ACTION REQUIRED] Outstanding Debts to AKPsi-Phi',
                     html_body: html_body,
                 };
