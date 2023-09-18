@@ -212,8 +212,8 @@ export default {
                 const { data, error } = await supabase.rpc('send_email_message', { message });
                 if (error) {
                     alert(error.message + " see console...");
-                    console.log('waiting 1s and reattempting');
-                    setTimeout(null, 1000);
+                    console.log('waiting 5s and reattempting');
+                    setTimeout(null, 5000);
                     const { data, e2: error } = await supabase.rpc('send_email_message', { message });
                     if (e2) {
                         console.log(e2.message);
