@@ -223,7 +223,8 @@ export default {
                     return;
                 }
                 else {
-                    console.log(data);
+                    this.emails += message.recipient;
+                    console.log(message.recipient + data);
                 }
             }
             alert('emails successfully sent');
