@@ -214,10 +214,15 @@ export default {
                     alert(error.message + " see console...");
                     console.log('waiting 5s and reattempting');
                     setTimeout(null, 5000);
-                    const { data, e2: error } = await supabase.rpc('send_email_message', { message });
+                    const { data, error: e2 } = await supabase.rpc('send_email_message', { message });
                     if (e2) {
                         console.log(e2.message);
                         console.log('failed second attempt, continuing without ' + message.recipient + " message sent");
+                    }
+                    else {
+                        this.emails += message.recipient;
+                        console.log(message.recipient + data);
+
                     }
                     // alert('Stopping emails... see messages table on Supabase for error logs and sent emails');
                     return;
