@@ -136,7 +136,9 @@ export default {
                 return;
             }
             console.log(chargesByUser);
+            let count = 0;
             for (const userId in chargesByUser) {
+                ++count;
                 const user = chargesByUser[userId];
                 const html_body = `
         <html>
@@ -209,11 +211,15 @@ export default {
                     subject: '[ACTION REQUIRED] Outstanding Debts to AKPsi-Phi',
                     html_body: html_body,
                 };
+                if (count % 20 == 0) {
+                    alert('10s cooldown....');
+                    setTimeout(null, 10000);
+                }
                 const { data, error } = await supabase.rpc('send_email_message', { message });
                 if (error) {
                     alert(error.message + " see console...");
-                    console.log('waiting 5s and reattempting');
-                    setTimeout(null, 5000);
+                    console.log('waiting 10s and reattempting');
+                    setTimeout(null, 10000);
                     const { data, error: e2 } = await supabase.rpc('send_email_message', { message });
                     if (e2) {
                         console.log(e2.message);
